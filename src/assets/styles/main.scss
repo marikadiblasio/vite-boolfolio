@@ -4,5 +4,24 @@ $fa-font-path: '../webfonts';
 
 @import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '@fortawesome/fontawesome-free/scss/solid.scss';
+@import '@fortawesome/fontawesome-free/scss/brands.scss';
 
 @import 'bootstrap/scss/bootstrap';
+
+//TEXT
+.my-text{
+    color: $my-dark-blue;
+}
+.my-light-text{
+    color: $my-light;
+}
+//BG
+.my-dark-bg{
+    background-color: $my-dark-blue;
+}
+.my-light-bg{
+    background-color: $my-light;
+}
+body{
+    background-color: $my-light;
+}
