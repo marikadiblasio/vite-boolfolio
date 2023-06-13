@@ -18,13 +18,20 @@
           </div>
           <div class="card-body" v-if="project.technologies.length > 0">
             Technologies:
-            <span v-for="tec in project.technologies">
-              {{ tec }}
-            </span>
+            <div v-for="tec in project.technologies">
+              {{ tec.name }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><button @click="getData(currentPage - 1)" class="page-link" :class="currentPage === 1 ? 'disabled' : ''">Previous</button></li>
+        <li class="page-item" v-for="n in lastPage"><button class="page-link" @click="getData(n)">{{ n }}</button></li>
+        <li class="page-item"><button @click="getData(currentPage + 1)" class="page-link" :class="currentPage === lastPage ? 'disabled' : ''">Next</button></li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -42,11 +49,16 @@ export default {
     }
   },
   methods: {
-    getData() {
-      axios.get(`${this.apiUrl}/projects`).then((res) => {
-        console.log(res);
+    getData(n) {
+      axios.get(`${this.apiUrl}/projects`, {
+        params: {
+          'page': n
+        }
+        }).then((res) => {
         this.projects = res.data.results.data;
-        console.log(this.projects);
+        this.currentPage = res.data.results.current_page;
+        this.lastPage = res.data.results.last_page;
+        //console.log(this.lastPage);
       });
     }
   },
