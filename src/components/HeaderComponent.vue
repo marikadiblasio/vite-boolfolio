@@ -12,8 +12,8 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item" v-for="(link, index) in menu" :key="index">
-                                <!-- <a class="nav-link" aria-current="page" href="#">Home</a> -->
-                                <router-link :to="{ name: link.routeName}" class="nav-link" aria-current="page" active-class="active">
+                                <router-link :to="{ name: link.routeName }" class="nav-link" aria-current="page"
+                                    active-class="active">
                                     {{ link.routeLabel }}
                                 </router-link>
                             </li>
@@ -28,8 +28,8 @@
 <script>
 export default {
     name: 'HeaderComponent',
-    data(){
-        return{
+    data() {
+        return {
             menu: [
                 {
                     routeLabel: 'Home',
@@ -55,18 +55,10 @@ export default {
 
 <style lang="scss" scoped>
 @use '../assets/styles/partials/_variables.scss' as *;
-// header {
-//     position: fixed;
-//     width: 100%;
-//     top: 0;
-//     height: 70px;
-//     z-index: 1000;
-// }
-
-a {
-    color: $my-light;
-
-    &:hover {
-        color: white;
-    }
-}</style>
+header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+</style>

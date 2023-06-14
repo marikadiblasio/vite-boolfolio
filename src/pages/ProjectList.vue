@@ -1,78 +1,64 @@
 <template>
-  
   <div class="container main-cont d-flex justify-content-center align-items-center">
     <div>
-    <h1 class="my-text text-center">{{ title }}</h1>
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6 col-lg-3 my-5" v-for="project in projects" :key="project.id">
-        <div class="card gy-3 h-100">
-          <div class="img-box">
-            <img :src="project.image" :alt="project.name" class="img-fluid">
-          </div>
-          <h6 class="card-title text-uppercase pt-2 px-3">
-            {{ project.name }}
-          </h6>
-          <div class="card-body" >
-            Description: <span v-html="project.description"></span>
-          </div>
-          <div class="card-body" v-if="project.type">
-            Type: {{ project.type }}
-          </div>
-          <div class="card-body" v-if="project.technologies.length > 0">
-            Technologies:
-            <div v-for="tec in project.technologies">
-              {{ tec.name }}
+      <h1 class="my-text text-center">{{ title }}</h1>
+      <div class="row justify-content-center gx-5">
+        <div class="col-12 col-md-6 col-lg-3 my-5" v-for="project in projects" :key="project.id">
+          <div class="card g-5 h-100">
+            <div class="img-box">
+              <img :src="project.image" :alt="project.name" class="img-fluid">
             </div>
+            <h6 class="card-title text-uppercase pt-2 px-3">
+              {{ project.name }}
+            </h6>
+            <div class="card-body">
+              Description: <span v-html="project.description"></span>
+            </div>
+            <div class="card-body" v-if="project.type">
+              Type: {{ project.type.name }}
+            </div>
+            <div class="card-body" v-if="project.technologies.length > 0">
+              Technologies:
+              <div v-for="tec in project.technologies">
+                {{ tec.name }}
+              </div>
+            </div>
+            <p class="card-text text-end pe-2 pb-2">
+            <router-link :to="{name: 'single-project', params: {slug: project.slug} }" class="btn my-light-text my-dark-bg">Details</router-link>
+          </p>
           </div>
-          <!-- <p class="card-text">
-            <router-link :to="" class="#btn-btn-primary">Go somewhere</router-link>
-          </p> -->
         </div>
       </div>
+      <nav class="pag-nav">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><button @click="getData(currentPage - 1)" class="page-link"
+              :class="currentPage === 1 ? 'disabled' : ''">Previous</button></li>
+          <li class="page-item" v-for="n in lastPage"><button class="page-link"
+              :class="n === currentPage ? 'active' : ''" @click="getData(n)">{{ n }}</button></li>
+          <li class="page-item"><button @click="getData(currentPage + 1)" class="page-link"
+              :class="currentPage === lastPage ? 'disabled' : ''">Next</button></li>
+        </ul>
+      </nav>
     </div>
-    <nav class="pag-nav">
-      <ul class="pagination justify-content-center">
-        <li class="page-item"><button @click="getData(currentPage - 1)" class="page-link"
-            :class="currentPage === 1 ? 'disabled' : ''">Previous</button></li>
-        <li class="page-item" v-for="n in lastPage"><button class="page-link" :class="n === currentPage ? 'active' : '' " @click="getData(n)">{{ n }}</button></li>
-        <li class="page-item"><button @click="getData(currentPage + 1)" class="page-link"
-            :class="currentPage === lastPage ? 'disabled' : ''">Next</button></li>
-      </ul>
-    </nav>
   </div>
-  </div>
-  <footer class="my-dark-bg">
-    <div class="d-flex py-2 container justify-content-between align-items-center">
-      <ul class="d-flex align-items-center list-unstyled m-0">
-        <li class="pe-3"><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
-        <li class="px-3"><a href="#"><i class="fa-brands fa-github"></i></a></li>
-      </ul>
-      <div class="px-3 my-light-text">
-        <span>
-          Copyright &copy; 2023 - All rights reserved
-        </span>
-      </div>
-    </div>
-
-  </footer>
 </template>
 
 <script>
-    import axios from 'axios';
-    export default {
-        name: 'ProjectList',
+import axios from 'axios';
+import { store } from '../data/store';
+export default {
+  name: 'ProjectList',
   data() {
     return {
       title: 'Projects',
       projects: [],
-      apiUrl: 'http://127.0.0.1:8000/api',
       currentPage: 1,
       lastPage: null,
     }
   },
   methods: {
     getData(n) {
-      axios.get(`${this.apiUrl}/projects`, {
+      axios.get(`${store.apiUrl}/projects`, {
         params: {
           'page': n
         }
@@ -87,31 +73,18 @@
   mounted() {
     this.getData(1);
   }
-    }
+}
 </script>
 
 <style lang="scss" scoped>
 @use '../assets/styles/partials/variables' as *;
+
 img,
 .img-box {
   height: 200px;
   width: 100%;
   object-fit: cover;
 }
-a{
-  color: $my-light;
-  &:hover{
-    color: white;
-  }
-}
-footer{
-  position: fixed;
-  height: 50px;
-  bottom: 0;
-  width: 100%;
-}
 
-// .container.main-cont{
-//   height: calc(100vh - 120px);
-// }
+
 </style>
