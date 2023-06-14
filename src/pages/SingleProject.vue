@@ -1,4 +1,5 @@
 <template>
+    <LoaderComponent v-if="store.loading"/>
     <div v-if="project" class="d-flex justify-content-center align-items-center container main-cont">
         <div class="card col-12">
             <h1 class="card-header text-center text-uppercase">{{ project.name }}</h1>
@@ -32,15 +33,21 @@
 <script>
 import axios from 'axios';
 import { store } from '../data/store';
+import LoaderComponent from '../components/LoaderComponent.vue';
 export default {
     name: 'SingleProject',
+    components:{
+        LoaderComponent
+    },
     data() {
         return {
             project: {},
+            store
         }
     },
     methods: {
         getProject() {
+            this.store.loading = true;
             axios.get(`${store.apiUrl}/projects/${this.$route.params.slug}`).then((res) => {
                 if (res.data.success) {
                     console.log(res.data.results);
@@ -49,11 +56,11 @@ export default {
                     this.$router.push({ name: 'not-found' });
                 }
             });
+            this.store.loading = false;
         }
     },
     mounted() {
         this.getProject();
-        //console.log(this.$route.params.slug);
     }
 }
 </script>

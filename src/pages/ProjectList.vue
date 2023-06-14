@@ -1,5 +1,6 @@
 <template>
-  <div class="container main-cont d-flex justify-content-center align-items-center">
+  <LoaderComponent v-if="store.loading" />
+  <div v-else class="container main-cont d-flex justify-content-center align-items-center">
     <div>
       <h1 class="my-text text-center">{{ title }}</h1>
       <div class="row justify-content-center gx-5">
@@ -23,6 +24,7 @@
 import axios from 'axios';
 import { store } from '../data/store';
 import CardComponent from '../components/CardComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 export default {
   name: 'ProjectList',
   data() {
@@ -31,13 +33,16 @@ export default {
       projects: [],
       currentPage: 1,
       lastPage: null,
+      store
     }
   },
   components:{
-    CardComponent
+    CardComponent,
+    LoaderComponent
   },
   methods: {
     getData(n) {
+      this.store.loading = true;
       axios.get(`${store.apiUrl}/projects`, {
         params: {
           'page': n
@@ -46,12 +51,12 @@ export default {
         this.projects = res.data.results.data;
         this.currentPage = res.data.results.current_page;
         this.lastPage = res.data.results.last_page;
-        //console.log(this.lastPage);
       });
+      this.store.loading = false;
     }
   },
   mounted() {
-    this.getData(1);
+    this.getData(1); 
   }
 }
 </script>
